@@ -1,0 +1,4 @@
+br\edu\ifpb\tsi\pd\filmes\Filme.class
+br\edu\ifpb\tsi\pd\filmes\FilmeServerPublisher.class
+br\edu\ifpb\tsi\pd\filmes\FilmeServerImpl.class
+br\edu\ifpb\tsi\pd\filmes\FilmeServer.class
