@@ -24,25 +24,29 @@ public class FilmeServerImpl implements FilmeServer{
     Session session = sessionFactory.openSession();
     
     @Override
-    public ArrayList<String> ola(String ola){
-        ArrayList teste = new ArrayList();
-        teste.add(ola);
-        teste.add(ola);
-        return teste;
+    public String lista(){
+        session.beginTransaction();
+        Query q = session.createQuery("from Filme");
+        ArrayList<Filme> lista = (ArrayList<Filme>) q.list();
+        ResponseDataFilmeList response;
+        response = new ResponseDataFilmeList(lista);
+        return Utils.convertFilmesToXML(response);
     }
     
     @Override
-    public String cadastra(String titulo) {
+    public String cadastra(String titulo, String diretor, 
+            String genero, String lancamento) {
         System.out.println("Criando Filme...");
         Filme filme = new Filme();
         filme.setTitulo(titulo);
-//        filme.setGenero("Ação");
-//        filme.setDiretor("Francis Lawrence");
-//        filme.setLancamento("2005");
+        filme.setDiretor(diretor);
+        filme.setGenero(genero);
+        filme.setLancamento(lancamento);
         
         session.beginTransaction();
         session.save(filme);
         session.getTransaction().commit();
+
         return Utils.convertFilmeToXML(filme);
     }
 
@@ -52,8 +56,13 @@ public class FilmeServerImpl implements FilmeServer{
         session.beginTransaction();
         Filme filme = (Filme) session.get(Filme.class, id);
         session.delete(filme);
-        session.getTransaction().commit();        
-        return Utils.convertFilmeToXML(filme);
+        session.getTransaction().commit();
+        
+        ArrayList<Filme> lista = new ArrayList<>();
+        lista.add(filme);
+        ResponseDataFilmeList response;
+        response = new ResponseDataFilmeList(lista);
+        return Utils.convertFilmesToXML(response);
     }
 
     @Override
@@ -68,7 +77,7 @@ public class FilmeServerImpl implements FilmeServer{
     }
     
     @Override
-    public ResponseDataArrayList consulta(String filtro){
+    public String consulta(String filtro){
         session.beginTransaction();
         Query q = session.createQuery(
            "from Filme where titulo = :filtro "
@@ -77,9 +86,9 @@ public class FilmeServerImpl implements FilmeServer{
                    + "or lancamento = :filtro"
         ).setParameter("filtro", filtro);
         ArrayList<Filme> lista = (ArrayList<Filme>) q.list();
-        ResponseDataArrayList response = new ResponseDataArrayList();
-        response.setList(Utils.convertFilmesToXML(lista));
-        return response;
+        ResponseDataFilmeList response;
+        response = new ResponseDataFilmeList(lista);
+        return Utils.convertFilmesToXML(response);
     }
     
 }

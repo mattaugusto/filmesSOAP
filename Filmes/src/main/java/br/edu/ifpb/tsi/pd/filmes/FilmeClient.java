@@ -25,10 +25,7 @@ public class FilmeClient {
         System.out.println(ws);
         FilmeServer filme = ws.getPort(FilmeServer.class);
 
-        System.out.println(filme.cadastra("ola"));
+//        System.out.println(filme.cadastra("ola"));
 //        System.out.println((filme.consulta("Constantine")).getList());
-//        System.out.println("Subtracao (5-1): " + calc.subtracao(5, 1));
-//        System.out.println("Multiplicacao (5*1): " + calc.multiplicacao(5, 1));
-//        System.out.println("Divisao (5/1): " + calc.divisao(5, 1));
     }
 }

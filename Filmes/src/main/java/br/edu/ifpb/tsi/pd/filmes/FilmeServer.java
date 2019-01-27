@@ -5,8 +5,6 @@
  */
 package br.edu.ifpb.tsi.pd.filmes;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.soap.SOAPBinding;
@@ -21,9 +19,10 @@ import javax.jws.soap.SOAPBinding.Style;
 @WebService
 @SOAPBinding(style = Style.RPC)
 public interface FilmeServer {
-    @WebMethod ArrayList<String> ola(String ola);
-    @WebMethod String cadastra(String titulo);
+    @WebMethod String lista();
+    @WebMethod String cadastra(String titulo, String diretor, 
+            String genero, String lancamento);
     @WebMethod String exclui(int id);
     @WebMethod String alteraTitulo(int id, String novoTitulo);
-    @WebMethod ResponseDataArrayList consulta(String titulo);
+    @WebMethod String consulta(String titulo);
 }

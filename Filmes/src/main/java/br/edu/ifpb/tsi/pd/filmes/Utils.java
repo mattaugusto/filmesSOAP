@@ -5,6 +5,7 @@
  */
 package br.edu.ifpb.tsi.pd.filmes;
 
+import com.thoughtworks.xstream.XStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,39 +20,19 @@ import javax.xml.bind.Marshaller;
  */
 public class Utils {
     
-    public static String convertFilmeToXML(Filme filme){
-        String xmlResult = "";
-        StringWriter sw = new StringWriter();
-        JAXBContext context;
-        try {
-            context = JAXBContext.newInstance(Filme.class);
-            Marshaller m = context.createMarshaller();
-            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            m.marshal(filme, sw);
-            xmlResult = sw.toString();
-        } catch (JAXBException ex) {
-            Logger.getLogger(FilmeServerImpl.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        }
-        return xmlResult;
+    public static String convertFilmesToXML(ResponseDataFilmeList lista){
+        XStream xstream = new XStream();
+        xstream.alias("filme", Filme.class);
+        xstream.alias("filmes", ResponseDataFilmeList.class);
+        xstream.addImplicitCollection(ResponseDataFilmeList.class, "list");
+        return xstream.toXML(lista);
     }
     
-    public static ArrayList convertFilmesToXML(ArrayList<Filme> lista){
-        ArrayList xmlResult = new ArrayList();
-        StringWriter sw = new StringWriter();
-        for (Filme filme : lista) {
-            JAXBContext context;
-            try {
-                context = JAXBContext.newInstance(Filme.class);
-                Marshaller m = context.createMarshaller();
-                m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); 
-                m.marshal(filme, sw);
-                xmlResult.add(sw.toString());
-            } catch (JAXBException ex) {
-                Logger.getLogger(FilmeServerImpl.class.getName())
-                        .log(Level.SEVERE, null, ex);
-            }
-        }
-        return xmlResult;
+    public static String convertFilmeToXML(Filme filme){
+        ArrayList<Filme> lista = new ArrayList<>();
+        lista.add(filme);
+        ResponseDataFilmeList response;
+        response = new ResponseDataFilmeList(lista);
+        return convertFilmesToXML(response);
     }
 }
