@@ -19,10 +19,12 @@ import javax.jws.soap.SOAPBinding.Style;
 @WebService
 @SOAPBinding(style = Style.RPC)
 public interface FilmeServer {
+    @WebMethod String get(int id);
     @WebMethod String lista();
     @WebMethod String cadastra(String titulo, String diretor, 
             String genero, String lancamento);
     @WebMethod String exclui(int id);
-    @WebMethod String alteraTitulo(int id, String novoTitulo);
-    @WebMethod String consulta(String titulo);
+    @WebMethod String altera(int id, String titulo, String diretor, 
+            String genero, String lancamento);
+    @WebMethod String consulta(String filtro);
 }

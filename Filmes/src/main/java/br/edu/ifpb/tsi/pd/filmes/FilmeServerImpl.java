@@ -24,6 +24,13 @@ public class FilmeServerImpl implements FilmeServer{
     Session session = sessionFactory.openSession();
     
     @Override
+    public String get(int id){
+        session.beginTransaction();
+        Filme filme = (Filme) session.get(Filme.class, id);
+        return Utils.convertFilmeToXML(filme);
+    }
+    
+    @Override
     public String lista(){
         session.beginTransaction();
         Query q = session.createQuery("from Filme");
@@ -66,11 +73,15 @@ public class FilmeServerImpl implements FilmeServer{
     }
 
     @Override
-    public String alteraTitulo(int id, String novoTitulo) {
-        System.out.println("Alterando Título de Filme...");
+    public String altera(int id, String titulo, String diretor, 
+            String genero, String lancamento) {
+        System.out.println("Alterando Filme...");
         session.beginTransaction();
         Filme filme = (Filme) session.get(Filme.class, id);
-        filme.setTitulo(novoTitulo);
+        filme.setTitulo(titulo);
+        filme.setDiretor(diretor);
+        filme.setGenero(genero);
+        filme.setLancamento(lancamento);
         session.save(filme);
         session.getTransaction().commit();        
         return Utils.convertFilmeToXML(filme);
